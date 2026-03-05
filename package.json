@@ -1,7 +1,6 @@
 {
   "name": "demo",
   "version": "1.0.0",
-  "description": "",
   "license": "ISC",
   "author": "",
   "type": "commonjs",
@@ -12,5 +11,15 @@
   "dependencies": {
     "firebase-admin": "^13.7.0",
     "firebase-tools": "^15.8.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Projetoquiim/demo.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/Projetoquiim/demo/issues"
+  },
+  "homepage": "https://github.com/Projetoquiim/demo#readme",
+  "description": ""
 }

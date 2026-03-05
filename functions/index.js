@@ -11,22 +11,37 @@ const {setGlobalOptions} = require("firebase-functions");
 const {onRequest} = require("firebase-functions/https");
 const logger = require("firebase-functions/logger");
 
-// For cost control, you can set the maximum number of containers that can be
-// running at the same time. This helps mitigate the impact of unexpected
-// traffic spikes by instead downgrading performance. This limit is a
-// per-function limit. You can override the limit for each function using the
-// `maxInstances` option in the function's options, e.g.
-// `onRequest({ maxInstances: 5 }, (req, res) => { ... })`.
-// NOTE: setGlobalOptions does not apply to functions using the v1 API. V1
-// functions should each use functions.runWith({ maxInstances: 10 }) instead.
-// In the v1 API, each function can only serve one request per container, so
-// this will be the maximum concurrent request count.
+const functions = require('firebase-functions');
+const express = require('express');
+const cors = require('cors');
+
+//usado para chamar arquivos html, por exemplo...
+const path = require('path');
+
+
+require('dotenv').config();
+
+const app = express();
+
+// 1. Configurar CORS (Permitir requisições de outras origens, se necessário)
+app.use(cors({ origin: true }));
+
+// Middleware para usar variáveis de ambiente
+app.get("/hello", (req, res) => {
+  res.send('hello world');
+});
+
+app.get("/Escolar", (req, res) => {
+      res.sendFile(path.join(__dirname, '../public', 'pqEscolar.html'));
+});
+
+app.get("/web", (req, res) => {
+  res.send('Outra rota . . .');
+});
+
+// 2. Exportar a app Express como uma function Firebase
+exports.app = functions.https.onRequest(app);
+
+
+
 setGlobalOptions({ maxInstances: 10 });
-
-// Create and deploy your first functions
-// https://firebase.google.com/docs/functions/get-started
-
-// exports.helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });

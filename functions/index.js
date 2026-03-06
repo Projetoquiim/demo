@@ -28,15 +28,18 @@ app.use(cors({ origin: true }));
 
 // Middleware para usar variáveis de ambiente
 app.get("/hello", (req, res) => {
-  res.send('hello world');
+  res.send("hello world4");
 });
 
 app.get("/Escolar", (req, res) => {
-      res.sendFile(path.join(__dirname, '../public', 'pqEscolar.html'));
+      /* res.sendFile(path.join(__dirname, "../public/pqEscolar.html")); */
+      /* res.sendFile(path.join(__dirname, "../public/pqEscolar.html")); */
+      res.sendFile(path.join(__dirname, "../public", "pqEscolar.html"));
+
 });
 
 app.get("/web", (req, res) => {
-  res.send('Outra rota . . .');
+  res.send('Outra rota4 . . .');
 });
 
 // 2. Exportar a app Express como uma function Firebase

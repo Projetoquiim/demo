@@ -14,14 +14,20 @@ const logger = require("firebase-functions/logger");
 const functions = require('firebase-functions');
 const express = require('express');
 const cors = require('cors');
+const admin = require("firebase-admin");
 
+const app = express();
 //usado para chamar arquivos html, por exemplo...
 const path = require('path');
 
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+admin.initializeApp();
+
+const db = admin.firestore();
 
 require('dotenv').config();
-
-const app = express();
 
 // 1. Configurar CORS (Permitir requisições de outras origens, se necessário)
 app.use(cors({ origin: true }));
@@ -37,8 +43,30 @@ app.get("/Escolar", (req, res) => {
       res.sendFile(path.join(__dirname, "../public", "pqEscolar.html"));
 });
 
-app.get("/web", (req, res) => {
-  res.send('Outra rota7 . . .');
+app.get('/Lista', async (req, res) => {
+  // Exemplo: buscar dados do Firestore
+ const snapshot = await db.collection("pqAluno").get();
+ const dados = snapshot.docs.map(doc => doc.data());
+  // Renderizar o arquivo views/index.ejs
+ res.render("index", { dados: dados });
+
+/* const usuario = {
+        nome: 'João', idade: 25, admin: true
+    };
+    // Passando o objeto 'usuario' para o arquivo 'index.ejs'
+    res.render('index', { usuario: usuario });
+ */
+});
+app.get('/teste', async (req, res) => {
+  // Exemplo: buscar dados do Firestore
+ const snapshot = await db.collection("pqAluno").get();
+ const dados = snapshot.docs.map(doc => doc.data());
+ /* dados.forEach((doc) => {
+    // doc.data() contém os dados, doc.id contém o ID do documento
+    console.log(`${doc.id} =>`, doc.data());
+  });  */
+ // Renderizar o arquivo views/index.ejs
+ res.render("index", { dados: dados });
 });
 
 // 2. Exportar a app Express como uma function Firebase

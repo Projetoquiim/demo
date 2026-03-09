@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bootstrap demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+  <h1>Gráfico de notas</h1>
+  <div>
+    <canvas id="grafico"></canvas>
+  </div>
+   <ul>
+    <% notas.forEach(function(notas) {%>
+      <li>Nome: <%= notas.NomeAluno %> - Nota: <%= notas.NotaAluno %>
+      </li>
+      <% });%>
+  </ul>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+
+  <script>
+    const ctx = document.getElementById("grafico");
+
+    const nome = [];
+    const notaaluno = [];
+    
+    <% notas.forEach(function (nota) {%>
+      nome.push("<%= nota.NomeAluno %>");
+      notaaluno.push("<%= nota.NotaAluno%>");
+    <% }); %>
+      
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: nome,
+          datasets: [{
+            label: '# of Votes',
+            data: notaaluno,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+  </script>
+</body>
+
+</html>

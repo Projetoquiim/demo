@@ -15,6 +15,7 @@ const functions = require('firebase-functions');
 const express = require('express');
 const cors = require('cors');
 const admin = require("firebase-admin");
+const storage = require("firebase-admin");
 
 const app = express();
 //usado para chamar arquivos html, por exemplo...
@@ -27,6 +28,8 @@ admin.initializeApp();
 
 const db = admin.firestore();
 
+const foto = ref(storage, "arquivos/0001.png");
+
 require('dotenv').config();
 
 // 1. Configurar CORS (Permitir requisições de outras origens, se necessário)
@@ -37,13 +40,13 @@ app.get("/hello", (req, res) => {
   res.send("hello world7");
 });
 
-app.get("/Escolar", (req, res) => {
+//app.get("/Escolar", (req, res) => {
       /* res.sendFile(path.join(__dirname, "../public/pqEscolar.html")); */
       /* res.sendFile(path.join(__dirname, /public/pqEscolar.html")); */
-      res.sendFile(path.join(__dirname, "../public", "pqEscolar.html"));
-});
+      //res.sendFile(path.join(__dirname, "../public", "pqEscolar.html"));
+//});
 
-app.get('/Lista', async (req, res) => {
+app.get("/Lista", async (req, res) => {
   // Exemplo: buscar dados do Firestore
  const snapshot = await db.collection("pqAluno").get();
  const dados = snapshot.docs.map(doc => doc.data());
@@ -57,6 +60,37 @@ app.get('/Lista', async (req, res) => {
     res.render('index', { usuario: usuario });
  */
 });
+
+app.get("/Escolar", async (req, res) => {
+  // Exemplo: buscar dados do Firestore
+ const snapshot = await db.collection("pqAluno").get();
+ const dados = snapshot.docs.map(doc => doc.data());
+  // Renderizar o arquivo views/index.ejs
+ res.render("pqEscolar", { dados: dados });
+
+/* const usuario = {
+        nome: 'João', idade: 25, admin: true
+    };
+    // Passando o objeto 'usuario' para o arquivo 'index.ejs'
+    res.render('index', { usuario: usuario });
+ */
+});
+app.get("/Notas", async (req, res) => {
+  // Exemplo: buscar dados do Firestore
+ const snapshot = await db.collection("notas").get();
+ const notas = snapshot.docs.map(doc => doc.data());
+  // Renderizar o arquivo views/index.ejs
+ res.render("notas", { notas: notas });
+
+/* const usuario = {
+        nome: 'João', idade: 25, admin: true
+    };
+    // Passando o objeto 'usuario' para o arquivo 'index.ejs'
+    res.render('index', { usuario: usuario });
+ */
+});
+
+
 app.get('/teste', async (req, res) => {
   // Exemplo: buscar dados do Firestore
  const snapshot = await db.collection("pqAluno").get();
